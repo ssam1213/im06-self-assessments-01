@@ -39,26 +39,37 @@ Tree.prototype.addChild = function (value) {
   // console.log(newTree.children);
   // console.log(newTree);
   this.children.push(newTree);
+  return newTree;
   // console.log(this.children);
 };
 
-Tree.prototype.map = function (value) {
-  console.log(value);
-  console.log(this.children);
-  for(var i = 0; i<this.children.length; i++){
-    console.log('children', this.children[i]);
-    return this.children[i] * value;
+Tree.prototype.map = function (fn) {
+  var newTree = Object.create(this);
+
+  function child(tree){
+    if(tree.children.length>0)
+    for(var i = 0; i<tree.children.length; i++){
+      tree.children[i].value = fn(tree.children[i].value);
+      child(tree.children[i]);
+    }
   }
+  child(newTree);
+  return newTree;
 };
 
-var root1 = new Tree(1);
-var branch2 = root1.addChild(2);
-var branch3 = root1.addChild(3);
-console.log(root1);
-console.log(root1.value);
-console.log(root1.children[0].value);
-console.log(root1.children[1].value);
-// var leaf4 = branch2.addChild(4);
-// var leaf5 = branch2.addChild(5);
-// var leaf6 = branch3.addChild(6);
-// var leaf7 = branch3.addChild(7);
+   var root1 = new Tree(1);
+   var branch2 = root1.addChild(2);
+   var branch3 = root1.addChild(3);
+   var leaf4 = branch2.addChild(4);
+   var leaf5 = branch2.addChild(5);
+   var leaf6 = branch3.addChild(6);
+   var leaf7 = branch3.addChild(7);
+   var newTree = root1.map(function (value) {
+     return value * 2;
+   });
+
+   console.log(newTree.value);
+   console.log(newTree.children[0].value);
+   console.log(newTree.children[0].children[1].value );
+   console.log(newTree.children[1].children[1].value);
+   console.log(root1.value);

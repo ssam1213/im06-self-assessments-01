@@ -48,28 +48,24 @@ var livesInSeoul = function (familyMember) {
 // returns ['Ingi Kim', 'Patrick Kim'];
 var filterFamilyMembers = function (familyTree, truthTest) {
   // All your code in this function body
-
+  // console.log('truthTest', truthTest);
   var children = familyTree.children;
   var array = [];
-  if(livesInSeoul(familyTree)){
-    array.push(familyTree.firstName + ' ' +  familyTree.lastName);
-    console.log('array', array);
-    if(children.length>0){
-      for(var i=0; i<familyTree.children.length; i++){
-        console.log('children[i]', children[i]);
-        array.push(''+filterFamilyMembers(children[i]));
-      }
-    }
-  } else {
-    if(children.length>0){
-      for(var j=0; j<familyTree.children.length; j++){
-        console.log('children[j]', children[j]);
-        array.push(''+filterFamilyMembers(children[j]));
+
+  function child(familyTree){
+    if(truthTest(familyTree)){
+      array.push(familyTree.firstName + ' ' +  familyTree.lastName);
+        if(children.length>0){
+          for(var i=0; i<familyTree.children.length; i++){
+            child(children[i]);
+        }
       }
     }
   }
-  console.log(array);
-return array;
+  child(familyTree);
+  return array;
 };
 
-filterFamilyMembers(familyTree, livesInSeoul);
+var output = filterFamilyMembers(familyTree, livesInSeoul);
+
+console.log(output);
